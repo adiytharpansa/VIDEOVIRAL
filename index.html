@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VIDEOVIRAL</title>
+<style>
+:root{--bg:#0f0f0f;--surface:#212121;--surface2:#272727;--border:#303030;--text:#fff;--muted:#aaa}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Roboto,Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+/* header modern — auto-hide saat geser ke bawah */
+body{padding-top:60px;transition:padding .3s ease}
+.top{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(15,15,15,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);display:flex;align-items:center;gap:10px;min-height:60px;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.08);transition:transform .3s ease}
+.top.hide{transform:translateY(-110%)}
+body.hide-top{padding-top:12px}
+body.hide-top .chips{top:0}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,#ff4e45 30%,#ff8a3d 60%,transparent);opacity:.5}
+.menu{width:42px;height:42px;border-radius:12px;border:1px solid transparent;background:transparent;color:#fff;font-size:19px;cursor:pointer;flex:none}
+.menu:hover{background:var(--surface2);border-color:var(--border)}
+.brand{font-size:17px;font-weight:800;letter-spacing:.05em;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.brand span{color:#ff4e45}
+.brand::before{content:"";width:9px;height:9px;border-radius:50%;background:#ff4e45;box-shadow:0 0 12px #ff4e45}
+.search{flex:1;display:flex;justify-content:center;min-width:0}
+.search-box{display:flex;width:min(560px,100%);background:#161616;border:1px solid var(--border);border-radius:999px;padding:3px 3px 3px 16px;gap:6px;align-items:center;transition:.2s}
+.search-box:focus-within{border-color:#3ea6ff;box-shadow:0 0 0 3px rgba(62,166,255,.18);background:#101010}
+.search-box input{flex:1;background:transparent;border:0;color:#fff;padding:9px 0;font-size:15px;outline:none;min-width:0}
+.search-box button{width:46px;height:38px;border:0;background:#fff;color:#111;border-radius:999px;cursor:pointer;font-size:16px;flex:none}
+.search-box button:hover{background:#e6e6e6}
+.icon-btn{width:42px;height:42px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:#fff;cursor:pointer;font-size:15px;font-weight:700;flex:none;display:grid;place-items:center}
+.icon-btn:hover{background:var(--surface2)}
+.top-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex:none}
+.btn{border:1px solid var(--border);background:var(--surface);color:#fff;border-radius:999px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--surface2)}
+.btn-sign{color:#fff;background:linear-gradient(135deg,#ff4e45,#b91c1c);border-color:transparent;box-shadow:0 6px 20px rgba(255,78,69,.35)}
+.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#7c3aed);display:grid;place-items:center;font-weight:700;font-size:14px;border:2px solid rgba(255,255,255,.18)}
+.m-only{display:none}
+/* bottom nav mobile */
+.bottom-nav{display:none}
+/* layout */
+.layout{display:flex}
+.side{width:72px;flex:none;display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:4px;position:sticky;top:60px;height:calc(100vh - 60px)}
+.side button{width:64px;border:0;background:transparent;color:#fff;border-radius:10px;padding:12px 0 10px;cursor:pointer;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.side button:hover{background:var(--surface2)}
+.side button.on{background:var(--surface2)}
+.side button i{font-style:normal;font-size:19px}
+.main{flex:1;min-width:0;padding:0 20px 40px}
+/* chips */
+.chips{display:flex;gap:10px;overflow-x:auto;padding:12px 0;position:sticky;top:60px;background:var(--bg);z-index:5;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:0;background:var(--surface2);color:#fff;border-radius:8px;padding:8px 14px;font-size:13.5px;font-weight:500;cursor:pointer}
+.chip.on{background:#fff;color:#0f0f0f}
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 16px;margin-top:8px}
+.card{cursor:pointer}
+.thumb{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#1e293b;display:grid;place-items:center}
+.thumb span.e{font-size:52px;opacity:.35}
+.thumb .play{position:absolute;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);display:grid;place-items:center}
+.dur{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.8);font-size:12px;font-weight:600;padding:2px 7px;border-radius:6px}
+.row{display:flex;gap:12px;margin-top:12px}
+.cav{width:36px;height:36px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff}
+.info{min-width:0}
+.info h3{font-size:14.5px;line-height:1.4;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.info p{color:var(--muted);font-size:12.5px;margin-top:4px}
+.empty{grid-column:1/-1;color:var(--muted);text-align:center;padding:40px;border:1px dashed var(--border);border-radius:12px}
+/* modal + toast */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;place-items:center;z-index:99;padding:20px}
+.modal.open{display:grid}
+.box{background:#212121;border:1px solid var(--border);border-radius:14px;max-width:440px;width:100%;overflow:hidden}
+.box header{display:flex;justify-content:space-between;align-items:center;padding:15px 18px;border-bottom:1px solid var(--border);font-weight:700}
+.box .body{padding:18px}
+.box textarea{width:100%;background:#121212;border:1px solid var(--border);color:#fff;border-radius:10px;padding:12px;font-size:13px}
+.box .row2{display:flex;gap:10px;margin-top:12px}
+.box .row2 button{flex:1}
+.close{background:var(--surface2);border:0;color:#fff;border-radius:8px;padding:8px 12px;cursor:pointer}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#fff;color:#111;padding:11px 22px;border-radius:8px;font-weight:600;font-size:14px;opacity:0;transition:.25s;z-index:99}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}.side{display:none}.side.drawer{display:flex}}
+@media(max-width:640px){
+  body{padding-top:112px}
+  body.hide-top{padding-top:8px}
+  body.hide-top .chips{top:0}
+  .top{flex-wrap:wrap;row-gap:8px;padding:10px 12px}
+  .search{order:3;flex-basis:100%}
+  .search-box{width:100%}
+  .brand{font-size:15px}
+  .btn-sign{padding:8px 13px}
+  .grid{grid-template-columns:1fr;gap:18px}
+  .main{padding:0 14px 90px}
+  .chips{top:112px;padding:10px 0}
+  .side{display:none}
+  .bottom-nav{display:flex;position:fixed;left:12px;right:12px;bottom:12px;z-index:60;background:rgba(24,24,24,.92);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:20px;padding:8px;justify-content:space-around;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+  .bottom-nav button{flex:1;border:0;background:transparent;color:#ccc;font-size:10.5px;font-weight:600;border-radius:14px;padding:9px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px}
+  .bottom-nav button.on{color:#fff;background:var(--surface2)}
+  .bottom-nav button i{font-style:normal;font-size:19px}
+}
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:70;display:none}
+.scrim.show{display:block}
+.side.drawer{position:fixed;left:0;top:0;bottom:0;width:250px;background:#141414;border-right:1px solid var(--border);z-index:71;display:none;flex-direction:column;align-items:stretch;padding:14px;gap:2px;height:100vh}
+.side.drawer.show{display:flex}
+.side.drawer button{width:100%;flex-direction:row;gap:14px;padding:13px 14px;font-size:14px;border-radius:12px}
+.side.drawer .drawer-head{display:flex;align-items:center;gap:10px;padding:6px 6px 14px;font-weight:800}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <button class="menu" onclick="toggleSide()" aria-label="Menu">☰</button>
+  <a class="brand" href="index.html">VIDEO<span>VIRAL</span></a>
+  <div class="search">
+    <div class="search-box">
+      <span style="color:#888">⌕</span>
+      <input id="q" placeholder="Telusuri video..." oninput="render()" onkeydown="if(event.key==='Enter')render()" enterkeyhint="search" />
+      <button onclick="render()" aria-label="Cari">→</button>
+    </div>
+  </div>
+  <div class="top-right">
+    <button class="btn btn-sign" onclick="toast('Masuk segera hadir')">Masuk</button>
+    <span class="avatar">K</span>
+  </div>
+</header>
+<div class="scrim" id="scrim" onclick="closeDrawer()"></div>
+
+<div class="layout">
+  <nav class="side" id="side">
+    <button class="on" onclick="goHome(this)"> <i>⌂</i> Beranda </button>
+    <button onclick="goTrend(this)"> <i>↗</i> Trending </button>
+    <button onclick="setCat('musik',this)"> <i>♪</i> Musik </button>
+    <button onclick="setCat('bola',this)"> <i>○</i> Bola </button>
+    <button onclick="setCat('lucu',this)"> <i>☺</i> Lucu </button>
+  </nav>
+
+  <main class="main">
+    <div class="chips" id="chips">
+      <button class="chip on" onclick="setCat('semua',this)">Semua</button>
+      <button class="chip" onclick="setCat('lucu',this)">Lucu</button>
+      <button class="chip" onclick="setCat('bola',this)">Bola</button>
+      <button class="chip" onclick="setCat('kuliner',this)">Kuliner</button>
+      <button class="chip" onclick="setCat('musik',this)">Musik</button>
+      <button class="chip" onclick="setCat('berita',this)">Berita</button>
+    </div>
+    <div class="grid" id="grid"></div>
+  </main>
+</div>
+
+<nav class="bottom-nav" id="bottomNav">
+  <button class="on" onclick="goHome(this)"><i>⌂</i>Beranda</button>
+  <button onclick="goTrend(this)"><i>↗</i>Trending</button>
+  <button onclick="toast('Koleksi segera hadir')"><i>▤</i>Koleksi</button>
+</nav>
+
+<div id="toast"></div>
+
+<script>
+const videos=[
+  {judul:"Detik-detik Gol Timnas Indonesia Menit 90",kreator:"bolaviral",viewsLabel:"8,2 jt",waktu:"2 jam lalu",kat:"bola",dur:"00:32",bg:"linear-gradient(135deg,#1e293b,#e8324a)"},
+  {judul:"Kucing Joget Koplo, Endingnya Bikin Ngakak",kreator:"kucinggemoy",viewsLabel:"5,6 jt",waktu:"5 jam lalu",kat:"lucu",dur:"00:18",bg:"linear-gradient(135deg,#1e1b4b,#7c3aed)"},
+  {judul:"Abang Cilok vs Bule: Adu Bahasa",kreator:"jajanviral",viewsLabel:"4,1 jt",waktu:"8 jam lalu",kat:"kuliner",dur:"01:05",bg:"linear-gradient(135deg,#052e16,#059669)"},
+  {judul:"DJ Viral Jedag-Jedug Full Bass 2026",kreator:"djmusik",viewsLabel:"3,8 jt",waktu:"11 jam lalu",kat:"musik",dur:"00:45",bg:"linear-gradient(135deg,#082f49,#3b82f6)"},
+  {judul:"Update Kemacetan Tol Pagi Ini",kreator:"infolalin",viewsLabel:"2,9 jt",waktu:"1 hari lalu",kat:"berita",dur:"00:57",bg:"linear-gradient(135deg,#0f172a,#334155)"},
+  {judul:"Prank Ojol Dapat Tip Rp500 Ribu",kreator:"baikviral",viewsLabel:"2,4 jt",waktu:"1 hari lalu",kat:"lucu",dur:"02:12",bg:"linear-gradient(135deg,#451a03,#f59e0b)"},
+  {judul:"Resep Seblak 5 Menit",kreator:"dapurmewah",viewsLabel:"1,9 jt",waktu:"2 hari lalu",kat:"kuliner",dur:"01:30",bg:"linear-gradient(135deg,#500f28,#db2777)"},
+  {judul:"Cover Drum Jalanan Bikin Merinding",kreator:"musikjalanan",viewsLabel:"1,2 jt",waktu:"3 hari lalu",kat:"musik",dur:"00:40",bg:"linear-gradient(135deg,#042f2e,#0d9488)"},
+];
+const colors=["#e8324a","#3b82f6","#059669","#ea580c","#7c3aed","#0d9488"];
+let cat='semua';
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){
+  const q=(document.getElementById('q').value||'').toLowerCase();
+  const g=document.getElementById('grid');g.innerHTML='';
+  const list=videos.map((v,i)=>({...v,i})).filter(v=>(cat==='semua'||v.kat===cat)&&(v.judul.toLowerCase().includes(q)||v.kreator.includes(q)));
+  if(!list.length){g.innerHTML='<div class="empty">Tidak ada hasil</div>';return;}
+  list.forEach(v=>{
+    const d=document.createElement('div');d.className='card';
+    d.innerHTML=`<div class="thumb" style="background:${v.bg}"><span class="e">▶</span><span class="play"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="dur">${v.dur}</span></div>
+    <div class="row"><span class="cav" style="background:${colors[v.i%colors.length]}">${v.kreator[0].toUpperCase()}</span>
+    <div class="info"><h3>${esc(v.judul)}</h3><p>@${esc(v.kreator)}<br>${v.viewsLabel} ditonton • ${esc(v.waktu)}</p></div></div>`;
+    d.onclick=()=>location.href='watch.html?v='+v.i;
+    g.appendChild(d);
+  });
+}
+function setCat(c,btn){
+  cat=c;
+  document.querySelectorAll('#chips .chip').forEach(x=>x.classList.toggle('on',x.textContent.toLowerCase()===c||(c==='semua'&&x.textContent==='Semua')));
+  if(btn&&btn.parentElement.classList.contains('side')){document.querySelectorAll('#side button').forEach(x=>x.classList.remove('on'));btn.classList.add('on');}
+  render();
+}
+function goHome(btn){document.querySelectorAll('#side button').forEach(x=>x.classList.remove('on'));if(btn&&btn.classList)btn.classList.add('on');document.querySelectorAll('#bottomNav button').forEach(x=>x.classList.remove('on'));const bn=document.querySelector('#bottomNav button');if(bn&&btn&&btn.parentElement&&btn.parentElement.id==='bottomNav'){btn.classList.add('on');}else if(bn&&(!btn||btn.parentElement.id!=='side')){bn.classList.add('on');}cat='semua';document.getElementById('q').value='';document.querySelectorAll('#chips .chip').forEach((x,i)=>x.classList.toggle('on',i===0));render();closeDrawer();}
+function goTrend(){location.href='watch.html?v=0';}
+function toggleSide(){
+  const s=document.getElementById('side');const sc=document.getElementById('scrim');
+  if(window.innerWidth<=1000){
+    if(!s.dataset.head){s.dataset.head='1';const h=document.createElement('div');h.className='drawer-head';h.innerHTML='VIDEO<span style="color:#ff4e45">VIRAL</span>';s.prepend(h);}
+    const willShow=!s.classList.contains('show');
+    s.classList.add('drawer');
+    s.classList.toggle('show',willShow);
+    sc.classList.toggle('show',willShow);
+  } else {
+    s.style.display=s.style.display==='none'?'flex':'none';
+  }
+}
+function closeDrawer(){const s=document.getElementById('side');const sc=document.getElementById('scrim');s.classList.remove('show');sc.classList.remove('show');if(window.innerWidth<=1000){setTimeout(()=>{if(!s.classList.contains('show'))s.classList.remove('drawer');},200);}}
+let tt;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.opacity='1';clearTimeout(tt);tt=setTimeout(()=>t.style.opacity='0',2000);}
+/* auto-hide header saat geser */
+let lastY=0;
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  const top=document.querySelector('.top');
+  if(y>140&&y>lastY+4){top.classList.add('hide');document.body.classList.add('hide-top');}
+  else if(y<lastY-4||y<=140){top.classList.remove('hide');document.body.classList.remove('hide-top');}
+  lastY=y;
+},{passive:true});
+render();
+</script>
+</body>
+</html>

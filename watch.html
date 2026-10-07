@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nonton — VIDEOVIRAL</title>
+<meta name="description" content="Halaman nonton VIDEOVIRAL — fokus ke video, minim distraksi." />
+<style>
+:root{
+  --bg:#0a0b0e; --surface:#12161c; --surface2:#181e27; --card:#141a22;
+  --border:#222c38; --border-soft:#1a222d;
+  --text:#f3f6fa; --muted:#9aa7b8; --muted2:#68788d;
+  --brand:#e8324a; --accent:#3b82f6; --green:#22c55e;
+  --max:1280px; --radius:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+button{font:inherit}
+/* NAV modern + mobile — auto-hide saat geser */
+body{padding-top:76px;transition:padding .3s ease}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(10,11,14,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:transform .3s ease}
+.nav.hide{transform:translateY(-110%)}
+body.hide-top{padding-top:12px}
+.nav-inner{display:flex;align-items:center;gap:10px;min-height:60px;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:8px;flex:none}
+.brand::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--brand);box-shadow:0 0 12px var(--brand)}
+.brand b{font-size:16px;letter-spacing:.05em}
+.brand b span{color:var(--brand)}
+.back{width:42px;height:42px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:#fff;cursor:pointer;display:grid;place-items:center;flex:none}
+.back:hover{background:var(--surface2)}
+.search{flex:1;display:flex;min-width:140px;max-width:560px;margin:0 auto;background:#161616;border:1px solid var(--border);border-radius:999px;padding:3px 3px 3px 14px;gap:6px;align-items:center}
+.search:focus-within{border-color:#3ea6ff;box-shadow:0 0 0 3px rgba(62,166,255,.18)}
+.search input{flex:1;background:transparent;border:0;outline:0;color:#fff;font-size:14px;min-width:0}
+.search button{border:0;background:#fff;color:#0b0e13;font-weight:800;border-radius:999px;padding:9px 16px;cursor:pointer;font-size:13px;flex:none}
+.nav-right{display:flex;gap:8px;align-items:center;flex:none;margin-left:auto}
+.btn{padding:9px 18px;border-radius:999px;font-weight:700;font-size:13.5px;border:1px solid var(--border);background:var(--surface2);color:#fff;cursor:pointer}
+.btn-primary{background:var(--brand);border-color:var(--brand)}
+.btn:hover{filter:brightness(1.1)}
+.avatar-sm{width:36px;height:36px;border-radius:50%;background:#3b82f6;display:grid;place-items:center;font-weight:800;font-size:14px}
+
+/* breadcrumb */
+.crumb{display:flex;align-items:center;gap:10px;padding:16px 0 12px;color:var(--muted);font-size:13px}
+.crumb a:hover{color:#fff}
+.crumb .sep{opacity:.4}
+.tag{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:rgba(232,50,74,.14);border:1px solid rgba(232,50,74,.4);color:#fda4af;padding:4px 10px;border-radius:999px}
+
+/* layout */
+.watch{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:24px;align-items:start;padding-bottom:40px}
+.watch.theater{grid-template-columns:minmax(0,1fr)}
+.watch.theater aside{display:none}
+/* player */
+.player-wrap{background:#000;border:1px solid var(--border);border-radius:16px;overflow:hidden;position:relative}
+video{width:100%;aspect-ratio:16/9;background:#000;display:block}
+.player-bar{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface);border-top:1px solid var(--border-soft);font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.player-bar .spacer{flex:1}
+.toggle{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);color:#fff;border-radius:999px;padding:7px 14px;cursor:pointer;font-size:12.5px;font-weight:700}
+.toggle.on{border-color:var(--brand);color:#fecdd3}
+/* title block */
+.title-block{margin-top:16px}
+.title-block h1{font-size:clamp(18px,2.4vw,24px);line-height:1.3;letter-spacing:-.02em}
+.meta{color:var(--muted);font-size:13.5px;margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.act-group{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:999px;overflow:hidden}
+.act-group button{background:transparent;border:0;color:#fff;padding:10px 16px;cursor:pointer;font-weight:700;font-size:13.5px;display:flex;gap:7px;align-items:center}
+.act-group button+button{border-left:1px solid var(--border)}
+.act-group button:hover,.act-btn:hover{background:var(--surface2)}
+.act-group button.active{color:#fda4af}
+.act-btn{background:var(--surface);border:1px solid var(--border);color:#fff;border-radius:999px;padding:10px 16px;cursor:pointer;font-weight:700;font-size:13.5px;display:flex;gap:7px;align-items:center}
+/* channel */
+.channel{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-top:14px}
+.ch-avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:18px;color:#fff;flex:none}
+.channel .info{flex:1;min-width:0}
+.channel .info b{display:flex;align-items:center;gap:6px;font-size:15px}
+.vbadge{width:16px;height:16px;border-radius:50%;background:var(--accent);display:inline-grid;place-items:center;font-size:10px;color:#fff}
+.channel small{color:var(--muted);font-size:12.5px}
+.sub-btn{border:0;border-radius:999px;padding:11px 22px;font-weight:800;cursor:pointer;background:#fff;color:#0b0e13}
+.sub-btn.subbed{background:var(--surface2);color:#fff;border:1px solid var(--border)}
+.bell{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);color:#fff;cursor:pointer;display:grid;place-items:center}
+/* desc */
+.desc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-top:14px;font-size:14px}
+.desc .tags{color:var(--accent);font-weight:600;font-size:13px;margin-bottom:8px}
+.desc p{color:#d3dbe6}
+.desc.collapsed p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.desc button{margin-top:10px;background:none;border:0;color:var(--muted);font-weight:700;cursor:pointer;font-size:13px}
+/* comments */
+.comments{margin-top:22px}
+.c-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.c-head h2{font-size:17px}
+.c-head span{color:var(--muted);font-size:13px}
+.c-add{display:flex;gap:12px;margin-bottom:18px}
+.c-add .avatar-sm{flex:none}
+.c-add-box{flex:1}
+.c-add-box input{width:100%;background:transparent;border:0;border-bottom:1px solid var(--border);color:#fff;padding:10px 2px;font-size:14px;outline:0}
+.c-add-box input:focus{border-color:var(--accent)}
+.c-add-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+.c-item{display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--border-soft)}
+.c-item .who b{font-size:13.5px}
+.c-item .who small{color:var(--muted2);font-size:12px;margin-left:8px}
+.c-item p{font-size:14px;color:#d3dbe6;margin:4px 0 8px}
+.c-like{background:none;border:0;color:var(--muted);cursor:pointer;font-size:12.5px;font-weight:700;display:flex;gap:6px;align-items:center}
+.c-like.liked{color:#fda4af}
+/* sidebar */
+aside{display:flex;flex-direction:column;gap:12px;position:sticky;top:78px}
+.side-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.side-head h2{font-size:15px}
+.autoplay{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);font-weight:700}
+.switch{width:38px;height:22px;border-radius:999px;background:#2a3442;position:relative;cursor:pointer;border:1px solid var(--border)}
+.switch i{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s}
+.switch.on{background:var(--brand)}
+.switch.on i{left:18px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-size:12.5px;font-weight:700;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:999px;padding:7px 14px;cursor:pointer}
+.chip.on{background:#fff;color:#0b0e13;border-color:#fff}
+.next{display:flex;gap:12px;background:transparent;border:1px solid transparent;border-radius:12px;padding:8px;cursor:pointer;text-align:left;color:inherit;width:100%}
+.next:hover{background:var(--surface);border-color:var(--border)}
+.next.current{background:var(--surface);border-color:rgba(232,50,74,.4)}
+.n-thumb{width:150px;aspect-ratio:16/9;border-radius:10px;position:relative;flex:none;display:grid;place-items:center;overflow:hidden;font-size:28px}
+.n-thumb::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.5))}
+.n-thumb .dur{position:absolute;z-index:2;bottom:6px;right:6px;background:rgba(0,0,0,.8);font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px}
+.next b{font-size:13.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.next small{color:var(--muted2);font-size:12px}
+/* toast */
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(16px);background:#fff;color:#0b0e13;padding:12px 22px;border-radius:999px;font-weight:700;font-size:14px;opacity:0;transition:.25s;z-index:99}
+@media(max-width:1020px){.watch{grid-template-columns:1fr}aside{position:static}}
+@media(max-width:640px){
+  .wrap{padding:0 14px}
+  .nav-inner{gap:8px}
+  .search{order:3;flex-basis:100%;max-width:none}
+  .crumb{font-size:12px;white-space:nowrap;overflow-x:auto}
+  .player-wrap{border-radius:12px;margin:0 -2px}
+  .actions{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
+  .act-group,.act-btn{flex:none}
+  .channel{flex-wrap:wrap}
+  .sub-btn{width:100%}
+  .n-thumb{width:132px}
+  .comments{padding-bottom:20px}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <button class="back" onclick="location.href='index.html'" aria-label="Kembali">←</button>
+    <a class="brand" href="index.html"><b>VIDEO<span>VIRAL</span></b></a>
+    <div class="search"><input id="topSearch" placeholder="Cari video lain..." onkeydown="if(event.key==='Enter')goSearch()" /><button onclick="goSearch()">Cari</button></div>
+    <div class="nav-right">
+      <button class="btn" onclick="toggleTheater()" id="theaterBtn">Theater</button>
+      <span class="avatar-sm">K</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="crumb"><a href="index.html">Beranda</a><span class="sep">/</span><a href="index.html#trending">Trending</a><span class="sep">/</span><span id="crumbCat">Video</span><span class="tag" id="crumbTag">Now playing</span></div>
+
+  <div class="watch" id="watchLayout">
+    <div>
+      <div class="player-wrap">
+        <video id="videoEl" controls playsinline preload="metadata" poster="">
+          <source id="videoSrc" src="" type="video/mp4" />
+          Browser kamu tidak mendukung video.
+        </video>
+        <div class="player-bar">
+          <span id="resLabel">1080p · Auto</span><span>·</span><span>Hemat kuota: <b id="saverLabel" style="color:#fff">Aktif</b></span>
+          <span class="spacer"></span>
+          <button class="toggle" id="saverBtn" onclick="toggleSaver()">Hemat kuota</button>
+          <button class="toggle" onclick="toggleTheater()">Mode theater</button>
+        </div>
+      </div>
+
+      <div class="title-block">
+        <h1 id="vTitle">Memuat...</h1>
+        <div class="meta"><span id="vViews">-</span><span>·</span><span id="vTime">-</span><span>·</span><span id="vCat" class="tag">-</span></div>
+        <div class="actions">
+          <div class="act-group">
+            <button id="likeBtn" onclick="toggleLike()">♥ <span id="likeCount">0</span></button>
+            <button id="dislikeBtn" onclick="toggleDislike()">♡ <span>Tidak suka</span></button>
+          </div>
+          <button class="act-btn" onclick="shareVideo()">⤴ Bagikan</button>
+          <button class="act-btn" id="saveBtn" onclick="toggleSave()">＋ Simpan</button>
+          <button class="act-btn" onclick="toast('Terima kasih, laporanmu diteruskan ke moderasi')">⚑ Laporkan</button>
+        </div>
+      </div>
+
+      <div class="channel">
+        <span class="ch-avatar" id="chAvatar">V</span>
+        <div class="info"><b><span id="chName">@channel</span> <span class="vbadge" id="chBadge" style="display:none">✓</span></b><small id="chSubs">100 rb subscriber</small></div>
+        <button class="bell" onclick="toast('Notifikasi channel diaktifkan')" aria-label="Notifikasi">🔔</button>
+        <button class="sub-btn" id="subBtn" onclick="toggleSub()">Subscribe</button>
+      </div>
+
+      <div class="desc collapsed" id="descBox">
+        <div class="tags" id="vTags">#viral #indonesia</div>
+        <p id="vDesc">Deskripsi...</p>
+        <button onclick="document.getElementById('descBox').classList.toggle('collapsed');this.textContent=document.getElementById('descBox').classList.contains('collapsed')?'Tampilkan lebih banyak':'Tampilkan lebih sedikit'">Tampilkan lebih banyak</button>
+      </div>
+
+      <div class="comments">
+        <div class="c-head"><h2>Komentar</h2><span id="cCount">0 komentar</span><span>·</span><span>Urut: Teratas</span></div>
+        <div class="c-add">
+          <span class="avatar-sm" style="background:#22c55e">K</span>
+          <div class="c-add-box">
+            <input id="cInput" placeholder="Tulis komentar sebagai @kamu..." onkeydown="if(event.key==='Enter')addComment()" />
+            <div class="c-add-actions"><button class="btn" onclick="document.getElementById('cInput').value=''">Batal</button><button class="btn btn-primary" onclick="addComment()">Kirim</button></div>
+          </div>
+        </div>
+        <div id="cList"></div>
+      </div>
+    </div>
+
+    <aside>
+      <div class="side-head">
+        <h2>Putar berikutnya</h2>
+        <label class="autoplay">Autoplay <span class="switch on" id="autoSwitch" onclick="toggleAuto()"><i></i></span></label>
+      </div>
+      <div class="chips" id="sideChips">
+        <button class="chip on" onclick="setSideFilter('semua',this)">Semua</button>
+        <button class="chip" onclick="setSideFilter('terkait',this)">Terkait</button>
+        <button class="chip" onclick="setSideFilter('channel',this)">Channel ini</button>
+      </div>
+      <div id="nextList" style="display:flex;flex-direction:column;gap:4px"></div>
+    </aside>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const videos=[
+  {judul:"Detik-detik Gol Timnas Indonesia Menit 90",kreator:"bolaviral",verified:true,subs:"2,1 jt subscriber",views:8200000,viewsLabel:"8,2 jt",waktu:"2 jam lalu",kat:"bola",dur:"00:32",bg:"linear-gradient(135deg,#1e293b,#e8324a)",likes:128400,src:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",desc:"Gol dramatis di menit akhir! Suasana stadion pecah. Jangan lupa subscribe @bolaviral untuk highlight timnas setiap hari. Komentar momen favoritmu di bawah!"},
+  {judul:"Kucing Joget Koplo, Endingnya Bikin Ngakak",kreator:"kucinggemoy",verified:true,subs:"890 rb subscriber",views:5600000,viewsLabel:"5,6 jt",waktu:"5 jam lalu",kat:"lucu",dur:"00:18",bg:"linear-gradient(135deg,#1e1b4b,#7c3aed)",likes:94200,src:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",desc:"Si Mochi joget koplo, endingnya tidak terduga. Full version tanpa watermark ada di channel. Follow @kucinggemoy!"},
+  {judul:"Abang Cilok vs Bule: Adu Bahasa, Ending Tak Terduga",kreator:"jajanviral",verified:false,subs:"340 rb subscriber",views:4100000,viewsLabel:"4,1 jt",waktu:"8 jam lalu",kat:"kuliner",dur:"01:05",bg:"linear-gradient(135deg,#052e16,#059669)",likes:76300,src:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",desc:"Jajanan kaki lima mendunia. Abang cilok ngobrol full Inggris dengan bule. Lokasi di Bandung, link di deskripsi."},
+  {judul:"DJ Viral Jedag-Jedug Full Bass 2026",kreator:"djmusik",verified:true,subs:"1,4 jt subscriber",views:3800000,viewsLabel:"3,8 jt",waktu:"11 jam lalu",kat:"musik",dur:"00:45",bg:"linear-gradient(135deg,#082f49,#3b82f6)",likes:65800,src:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",desc:"Mix terbaru 2026, pakai headset biar berasa bassnya. Tracklist di pinned comment."},
+  {judul:"Update Kemacetan Tol: Penjelasan Polisi Lalu Lintas",kreator:"infolalin",verified:true,subs:"670 rb subscriber",views:2900000,viewsLabel:"2,9 jt",waktu:"1 hari lalu",kat:"berita",dur:"00:57",bg:"linear-gradient(135deg,#0f172a,#334155)",likes:32100,src:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",desc:"Pantauan arus tol pagi ini + imbauan resmi. Hindari jalur KM 47-52 sampai pukul 12.00."},
+  {judul:"Prank Ojol: Kaget Dapat Tip Rp500 Ribu",kreator:"baikviral",verified:false,subs:"210 rb subscriber",views:2400000,viewsLabel:"2,4 jt",waktu:"1 hari lalu",kat:"lucu",dur:"02:12",bg:"linear-gradient(135deg,#451a03,#f59e0b)",likes:48900,src:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",desc:"Eksperimen sosial: kasih tip besar ke ojol yang jujur. Semua partisipan dibayar dan setuju tayang."},
+  {judul:"Resep Seblak 5 Menit, Dijamin Nagih",kreator:"dapurmewah",verified:true,subs:"980 rb subscriber",views:1900000,viewsLabel:"1,9 jt",waktu:"2 hari lalu",kat:"kuliner",dur:"01:30",bg:"linear-gradient(135deg,#500f28,#db2777)",likes:41200,src:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",desc:"Bahan: kerupuk, kencur, cabai, telur. Langkah lengkap di video. Level pedas bisa diatur."},
+  {judul:"Cover Drum Jalanan yang Bikin Merinding",kreator:"musikjalanan",verified:false,subs:"120 rb subscriber",views:1200000,viewsLabel:"1,2 jt",waktu:"3 hari lalu",kat:"musik",dur:"00:40",bg:"linear-gradient(135deg,#042f2e,#0d9488)",likes:28700,src:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",desc:"Live di trotoar Malioboro, direkam satu take. Dukung musisi jalanan dengan subscribe."},
+];
+const seedComments=[
+  {u:"RakaP",t:"3 jam lalu",txt:"Merinding nontonnya, kualitas videonya jernih banget.",l:1240},
+  {u:"Sinta",t:"5 jam lalu",txt:"Baru upload 2 jam udah 8 juta views, gila sih ini.",l:860},
+  {u:"BangJago",t:"1 jam lalu",txt:"Nonton sambil makan seblak, kombinasi sempurna.",l:212},
+];
+const colors=["#e8324a","#3b82f6","#059669","#ea580c","#7c3aed","#0d9488"];
+function q(k){return new URLSearchParams(location.search).get(k)}
+let vid=parseInt(q('v')||'0'); if(isNaN(vid)||vid<0||vid>=videos.length) vid=0;
+let sideFilter='semua';
+let autoplay=true;
+let liked=JSON.parse(localStorage.getItem('vv_likes')||'[]');
+let subs=JSON.parse(localStorage.getItem('vv_subs')||'[]');
+let saved=JSON.parse(localStorage.getItem('vv_saved')||'[]');
+let myComments=JSON.parse(localStorage.getItem('vv_comments')||'{}');
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fmt(n){if(n>=1e6)return(n/1e6).toFixed(1).replace('.',',')+' jt';if(n>=1e3)return(n/1e3).toFixed(1).replace('.',',')+' rb';return''+n}
+function loadVideo(i){
+  vid=i; const v=videos[vid];
+  document.title=v.judul.slice(0,60)+' — VIDEOVIRAL';
+  document.getElementById('vTitle').textContent=v.judul;
+  document.getElementById('vViews').textContent=v.viewsLabel+' views';
+  document.getElementById('vTime').textContent=v.waktu;
+  document.getElementById('vCat').textContent=v.kat;
+  document.getElementById('crumbCat').textContent='Kategori '+v.kat;
+  document.getElementById('vTags').textContent='#'+v.kat+' #viral #indonesia #'+v.kreator;
+  document.getElementById('vDesc').textContent=v.desc;
+  document.getElementById('chName').textContent='@'+v.kreator;
+  document.getElementById('chSubs').textContent=v.subs;
+  document.getElementById('chAvatar').textContent=v.kreator[0].toUpperCase();
+  document.getElementById('chAvatar').style.background=colors[vid%colors.length];
+  document.getElementById('chBadge').style.display=v.verified?'inline-grid':'none';
+  const el=document.getElementById('videoEl');
+  document.getElementById('videoSrc').src=v.src; el.load();
+  el.play().catch(()=>{});
+  history.replaceState(null,'','watch.html?v='+vid);
+  updateLikeUI(); updateSubUI(); updateSaveUI(); renderNext(); renderComments();
+}
+function updateLikeUI(){
+  const v=videos[vid]; const isL=liked.includes(vid);
+  document.getElementById('likeBtn').classList.toggle('active',isL);
+  document.getElementById('likeCount').textContent=fmt(v.likes+(isL?1:0));
+  const isD=(JSON.parse(localStorage.getItem('vv_dis')||'[]')).includes(vid);
+  document.getElementById('dislikeBtn').classList.toggle('active',isD);
+}
+function toggleLike(){
+  let d=JSON.parse(localStorage.getItem('vv_dis')||'[]');
+  if(liked.includes(vid)) liked=liked.filter(x=>x!==vid);
+  else{liked.push(vid); d=d.filter(x=>x!==vid); localStorage.setItem('vv_dis',JSON.stringify(d));}
+  localStorage.setItem('vv_likes',JSON.stringify(liked)); updateLikeUI();
+}
+function toggleDislike(){
+  let d=JSON.parse(localStorage.getItem('vv_dis')||'[]');
+  if(d.includes(vid)) d=d.filter(x=>x!==vid); else{d.push(vid); liked=liked.filter(x=>x!==vid); localStorage.setItem('vv_likes',JSON.stringify(liked));}
+  localStorage.setItem('vv_dis',JSON.stringify(d)); updateLikeUI(); toast('Feedback diterima');
+}
+function updateSubUI(){const b=document.getElementById('subBtn');const s=subs.includes(vid);b.textContent=s?'Subscribed ✓':'Subscribe';b.classList.toggle('subbed',s);}
+function toggleSub(){if(subs.includes(vid)){subs=subs.filter(x=>x!==vid);toast('Berhenti mengikuti @'+videos[vid].kreator)}else{subs.push(vid);toast('Mengikuti @'+videos[vid].kreator)}localStorage.setItem('vv_subs',JSON.stringify(subs));updateSubUI();}
+function updateSaveUI(){const s=saved.includes(vid);document.getElementById('saveBtn').textContent=s?'✓ Tersimpan':'＋ Simpan';}
+function toggleSave(){if(saved.includes(vid)){saved=saved.filter(x=>x!==vid);toast('Dihapus dari simpanan')}else{saved.push(vid);toast('Disimpan ke Tonton Nanti')}localStorage.setItem('vv_saved',JSON.stringify(saved));updateSaveUI();}
+function shareVideo(){const url=location.href;navigator.clipboard?.writeText(url).catch(()=>{});toast('Tautan disalin: '+url.slice(0,46)+'…');}
+function toggleSaver(){const b=document.getElementById('saverBtn');const on=b.classList.toggle('on');document.getElementById('saverLabel').textContent=on?'Aktif':'Mati';toast(on?'Mode hemat kuota aktif (480p)':'Mode hemat kuota mati');}
+function toggleTheater(){document.getElementById('watchLayout').classList.toggle('theater');}
+function toggleAuto(){autoplay=!autoplay;document.getElementById('autoSwitch').classList.toggle('on',autoplay);toast('Autoplay '+(autoplay?'aktif':'mati'));}
+function goSearch(){const s=document.getElementById('topSearch').value;location.href='index.html'+(s?'#trending':'');}
+function setSideFilter(f,btn){sideFilter=f;document.querySelectorAll('#sideChips .chip').forEach(c=>c.classList.remove('on'));btn.classList.add('on');renderNext();}
+function renderNext(){
+  const box=document.getElementById('nextList');box.innerHTML='';
+  const cur=videos[vid];
+  videos.forEach((v,i)=>{
+    if(i===vid) return;
+    if(sideFilter==='terkait'&&v.kat!==cur.kat) return;
+    if(sideFilter==='channel'&&v.kreator!==cur.kreator) return;
+    const b=document.createElement('button');b.className='next'+(i===vid?' current':'');
+    b.innerHTML=`<span class="n-thumb" style="background:${v.bg}">▶<span class="dur">${v.dur}</span></span><span><b>${esc(v.judul)}</b><br><small>@${esc(v.kreator)} · ${v.viewsLabel} views · ${esc(v.waktu)}</small></span>`;
+    b.onclick=()=>{loadVideo(i);window.scrollTo({top:0,behavior:'smooth'});};
+    box.appendChild(b);
+  });
+  if(!box.children.length)box.innerHTML='<p style="color:var(--muted);font-size:13px;padding:8px">Tidak ada video terkait. Coba filter Semua.</p>';
+}
+function renderComments(){
+  const extra=myComments[vid]||[];
+  const all=[...extra,...seedComments];
+  document.getElementById('cCount').textContent=all.length+' komentar';
+  const list=document.getElementById('cList');list.innerHTML='';
+  all.forEach((c,idx)=>{
+    const d=document.createElement('div');d.className='c-item';
+    d.innerHTML=`<span class="avatar-sm" style="background:${colors[(idx+vid)%colors.length]};width:34px;height:34px;font-size:13px">${esc(c.u[0].toUpperCase())}</span><div class="who"><b>@${esc(c.u)}</b><small>${esc(c.t)}</small><p>${esc(c.txt)}</p><button class="c-like" onclick="this.classList.toggle('liked')">♥ ${c.l}</button></div>`;
+    list.appendChild(d);
+  });
+}
+function addComment(){
+  const inp=document.getElementById('cInput');const t=inp.value.trim();if(!t){toast('Tulis komentar dulu');return;}
+  if(!myComments[vid])myComments[vid]=[];
+  myComments[vid].unshift({u:'kamu',t:'baru saja',txt:t,l:0});
+  localStorage.setItem('vv_comments',JSON.stringify(myComments));
+  inp.value='';renderComments();toast('Komentar dipublikasikan');
+}
+let tt;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';clearTimeout(tt);tt=setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(-50%) translateY(16px)'},2300);}
+document.getElementById('videoEl').addEventListener('ended',()=>{if(!autoplay)return;const n=(vid+1)%videos.length;loadVideo(n);toast('Autoplay: video berikutnya');});
+/* auto-hide header saat geser */
+let lastY=0;
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  const nav=document.querySelector('.nav');
+  if(y>120&&y>lastY+4){nav.classList.add('hide');document.body.classList.add('hide-top');}
+  else if(y<lastY-4||y<=120){nav.classList.remove('hide');document.body.classList.remove('hide-top');}
+  lastY=y;
+},{passive:true});
+loadVideo(vid);
+</script>
+</body>
+</html>
